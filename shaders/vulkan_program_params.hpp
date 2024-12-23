@@ -42,6 +42,8 @@ public:
   void Apply(ref_ptr<dp::GraphicsContext> context, ref_ptr<dp::GpuProgram> program,
              TrafficProgramParams const & params) override;
   void Apply(ref_ptr<dp::GraphicsContext> context, ref_ptr<dp::GpuProgram> program,
+             TileProgramParams const & params) override;
+  void Apply(ref_ptr<dp::GraphicsContext> context, ref_ptr<dp::GpuProgram> program,
              TransitProgramParams const & params) override;
   void Apply(ref_ptr<dp::GraphicsContext> context, ref_ptr<dp::GpuProgram> program,
              GuiProgramParams const & params) override;

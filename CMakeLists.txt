@@ -381,6 +381,7 @@ add_subdirectory(storage)
 add_subdirectory(tracking)
 add_subdirectory(traffic)
 add_subdirectory(transit)
+add_subdirectory(tiles)
 
 if (PLATFORM_DESKTOP)
   omim_add_tool_subdirectory(feature_list)

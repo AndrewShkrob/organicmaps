@@ -158,6 +158,7 @@ private:
 FrontendRenderer::FrontendRenderer(Params && params)
   : BaseRenderer(ThreadsCommutator::RenderThread, params)
   , m_trafficRenderer(new TrafficRenderer())
+  , m_tileRenderer(new TileRenderer())
   , m_transitSchemeRenderer(new TransitSchemeRenderer())
   , m_drapeApiRenderer(new DrapeApiRenderer())
   , m_overlayTree(new dp::OverlayTree(VisualParams::Instance().GetVisualScale()))
@@ -1446,6 +1447,7 @@ void FrontendRenderer::RenderScene(ScreenBase const & modelView, bool activeFram
     bool const hasTransitRouteData = HasTransitRouteData();
     if (m_buildingsFramebuffer->IsSupported() && !m_routeRenderer->IsRulerRoute())
     {
+      RenderTileLayer(modelView);
       RenderTrafficLayer(modelView);
       if (!hasTransitRouteData)
         RenderRouteLayer(modelView);
@@ -1454,6 +1456,7 @@ void FrontendRenderer::RenderScene(ScreenBase const & modelView, bool activeFram
     else
     {
       Render3dLayer(modelView);
+      RenderTileLayer(modelView);
       RenderTrafficLayer(modelView);
       if (!hasTransitRouteData)
         RenderRouteLayer(modelView);
@@ -1649,6 +1652,19 @@ void FrontendRenderer::RenderTrafficLayer(ScreenBase const & modelView)
     m_context->Clear(dp::ClearBits::DepthBit, dp::kClearBitsStoreAll);
     m_trafficRenderer->RenderTraffic(m_context, make_ref(m_gpuProgramManager), modelView,
                                      GetCurrentZoom(), 1.0f /* opacity */, m_frameValues);
+  }
+}
+
+void FrontendRenderer::RenderTileLayer(ScreenBase const & modelView)
+{
+  TRACE_SECTION("[drape] RenderTileLayer");
+  CHECK(m_context != nullptr, ());
+  if (m_tileRenderer->HasRenderData() && IsValidCurrentZoom())
+  {
+    DEBUG_LABEL(m_context, "Tile Layer");
+    m_context->Clear(dp::ClearBits::DepthBit, dp::kClearBitsStoreAll);
+    m_tileRenderer->Render(m_context, make_ref(m_gpuProgramManager), modelView, GetCurrentZoom(), 1.0f /* opacity */,
+                           m_frameValues);
   }
 }
 
@@ -2292,6 +2308,7 @@ TTilesCollection FrontendRenderer::ResolveTileKeys(ScreenBase const & screen)
   });
 
   m_trafficRenderer->OnUpdateViewport(result, GetCurrentZoom(), tilesToDelete);
+  m_tileRenderer->OnUpdateViewport(result, GetCurrentZoom(), tilesToDelete);
 
 #if defined(DRAPE_MEASURER_BENCHMARK) && defined(GENERATING_STATISTIC)
   DrapeMeasurer::Instance().StartScenePreparing();

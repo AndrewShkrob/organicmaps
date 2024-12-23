@@ -37,12 +37,12 @@ void AreaShape::Draw(ref_ptr<dp::GraphicsContext> context, ref_ptr<dp::Batcher> 
     outlineUv = outlineRegion.GetTexRect().Center();
   }
 
-  if (m_params.m_is3D)
-    DrawArea3D(context, batcher, colorUv, outlineUv, region.GetTexture());
-  else if (m_params.m_hatching)
-    DrawHatchingArea(context, batcher, colorUv, region.GetTexture(), textures->GetHatchingTexture());
-  else
-    DrawArea(context, batcher, colorUv, outlineUv, region.GetTexture());
+//  if (m_params.m_is3D)
+//    DrawArea3D(context, batcher, colorUv, outlineUv, region.GetTexture());
+//  else if (m_params.m_hatching)
+//    DrawHatchingArea(context, batcher, colorUv, region.GetTexture(), textures->GetHatchingTexture());
+//  else
+//    DrawArea(context, batcher, colorUv, outlineUv, region.GetTexture());
 }
 
 void AreaShape::DrawArea(ref_ptr<dp::GraphicsContext> context, ref_ptr<dp::Batcher> batcher,

@@ -183,6 +183,13 @@ void VulkanProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context,
 
 void VulkanProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context,
                                       ref_ptr<dp::GpuProgram> program,
+                                      TileProgramParams const & params)
+{
+  ApplyImpl(context, program, params);
+}
+
+void VulkanProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context,
+                                      ref_ptr<dp::GpuProgram> program,
                                       TransitProgramParams const & params)
 {
   ApplyImpl(context, program, params);

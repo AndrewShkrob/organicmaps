@@ -13,6 +13,7 @@
 #include "drape_frontend/route_renderer.hpp"
 #include "drape_frontend/postprocess_renderer.hpp"
 #include "drape_frontend/threads_commutator.hpp"
+#include "drape_frontend/tile_renderer.hpp"
 #include "drape_frontend/traffic_renderer.hpp"
 #include "drape_frontend/transit_scheme_renderer.hpp"
 #include "drape_frontend/user_event_stream.hpp"
@@ -187,6 +188,7 @@ private:
   void RenderNonDisplaceableUserMarksLayer(ScreenBase const & modelView, DepthLayer layerId);
   void RenderTransitSchemeLayer(ScreenBase const & modelView);
   void RenderTrafficLayer(ScreenBase const & modelView);
+  void RenderTileLayer(ScreenBase const & modelView);
   void RenderRouteLayer(ScreenBase const & modelView);
   void RenderTransitBackground();
   void RenderEmptyFrame();
@@ -313,6 +315,7 @@ private:
 
   drape_ptr<RouteRenderer> m_routeRenderer;
   drape_ptr<TrafficRenderer> m_trafficRenderer;
+  drape_ptr<TileRenderer> m_tileRenderer;
   drape_ptr<TransitSchemeRenderer> m_transitSchemeRenderer;
   drape_ptr<dp::Framebuffer> m_buildingsFramebuffer;
   drape_ptr<ScreenQuadRenderer> m_screenQuadRenderer;

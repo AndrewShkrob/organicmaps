@@ -11,6 +11,7 @@ void ProgramParams::Init()
   MapProgramParams::BindPrograms(m_boundParams);
   RouteProgramParams::BindPrograms(m_boundParams);
   TrafficProgramParams::BindPrograms(m_boundParams);
+  TileProgramParams::BindPrograms(m_boundParams);
   TransitProgramParams::BindPrograms(m_boundParams);
   GuiProgramParams::BindPrograms(m_boundParams);
   ShapesProgramParams::BindPrograms(m_boundParams);

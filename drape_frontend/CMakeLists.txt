@@ -186,6 +186,8 @@ set(SRC
   tile_info.hpp
   tile_key.cpp
   tile_key.hpp
+  tile_renderer.cpp
+  tile_renderer.hpp
   tile_utils.cpp
   tile_utils.hpp
   traffic_generator.cpp

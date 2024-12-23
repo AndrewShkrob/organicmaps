@@ -133,6 +133,15 @@ struct ALIGNMENT TrafficProgramParams
     Program::TrafficCircle)
 };
 
+struct ALIGNMENT TileProgramParams
+{
+  glsl::mat4 m_modelView;
+  glsl::mat4 m_projection;
+  glsl::mat4 m_pivotTransform;
+
+  BIND_PROGRAMS(TileProgramParams, Program::Tile)
+};
+
 struct ALIGNMENT TransitProgramParams
 {
   glsl::mat4 m_modelView;
@@ -234,6 +243,8 @@ public:
                      ref_ptr<dp::GpuProgram> program, RouteProgramParams const & params) = 0;
   virtual void Apply(ref_ptr<dp::GraphicsContext> context,
                      ref_ptr<dp::GpuProgram> program, TrafficProgramParams const & params) = 0;
+  virtual void Apply(ref_ptr<dp::GraphicsContext> context,
+                     ref_ptr<dp::GpuProgram> program, TileProgramParams const & params) = 0;
   virtual void Apply(ref_ptr<dp::GraphicsContext> context,
                      ref_ptr<dp::GpuProgram> program, TransitProgramParams const & params) = 0;
   virtual void Apply(ref_ptr<dp::GraphicsContext> context,

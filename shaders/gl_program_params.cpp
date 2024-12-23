@@ -141,6 +141,18 @@ void GLProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context,
 
 void GLProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context,
                                   ref_ptr<dp::GpuProgram> program,
+                                  TileProgramParams const & params)
+{
+  UNUSED_VALUE(context);
+  UniformsGuard guard(program, params);
+
+  Parameter::CheckApply(guard, "u_modelView", params.m_modelView);
+  Parameter::CheckApply(guard, "u_projection", params.m_projection);
+  Parameter::CheckApply(guard, "u_pivotTransform", params.m_pivotTransform);
+}
+
+void GLProgramParamsSetter::Apply(ref_ptr<dp::GraphicsContext> context,
+                                  ref_ptr<dp::GpuProgram> program,
                                   TransitProgramParams const & params)
 {
   UNUSED_VALUE(context);
