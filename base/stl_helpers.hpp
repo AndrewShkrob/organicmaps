@@ -4,7 +4,6 @@
 #include <functional>
 #include <initializer_list>
 #include <iterator>
-#include <memory>
 #include <tuple>
 #include <type_traits>
 #include <vector>
@@ -82,25 +81,6 @@ struct Equals<false, T, C>
   }
 
   T (C::*m_p)() const;
-};
-
-template <typename Container, typename Deletor>
-class DeleteRangeFunctor
-{
-public:
-  DeleteRangeFunctor(Container & cont, Deletor const & deletor) : m_cont(cont), m_deletor(deletor)
-  {
-  }
-
-  void operator()()
-  {
-    for_each(m_cont.begin(), m_cont.end(), m_deletor);
-    m_cont.clear();
-  }
-
-private:
-  Container & m_cont;
-  Deletor m_deletor;
 };
 }  // namespace impl
 
@@ -219,59 +199,6 @@ std::underlying_type_t<T> constexpr E2I(T value)
   return Underlying(value);
 }
 
-// Use this if you want to make a functor whose first
-// argument is ignored and the rest are forwarded to |fn|.
-template <typename Fn>
-class IgnoreFirstArgument
-{
-public:
-  template <typename Gn>
-  explicit IgnoreFirstArgument(Gn && gn) : m_fn(std::forward<Gn>(gn)) {}
-
-  template <typename Arg, typename... Args>
-  std::invoke_result_t<Fn, Args&&...> operator()(Arg &&, Args &&... args)
-  {
-    return m_fn(std::forward<Args>(args)...);
-  }
-
-private:
-  Fn m_fn;
-};
-
-template <typename Fn>
-IgnoreFirstArgument<Fn> MakeIgnoreFirstArgument(Fn && fn)
-{
-  return IgnoreFirstArgument<Fn>(std::forward<Fn>(fn));
-}
-
-template <size_t I = 0, typename Fn, typename... Tp>
-std::enable_if_t<I == sizeof...(Tp), void>
-for_each_in_tuple(std::tuple<Tp...> &, Fn &&)
-{
-}
-
-template <size_t I = 0, typename Fn, typename... Tp>
-std::enable_if_t<I != sizeof...(Tp), void>
-for_each_in_tuple(std::tuple<Tp...> & t, Fn && fn)
-{
-  fn(I, std::get<I>(t));
-  for_each_in_tuple<I + 1, Fn, Tp...>(t, std::forward<Fn>(fn));
-}
-
-template <size_t I = 0, typename Fn, typename... Tp>
-std::enable_if_t<I == sizeof...(Tp), void>
-for_each_in_tuple_const(std::tuple<Tp...> const &, Fn &&)
-{
-}
-
-template <size_t I = 0, typename Fn, typename... Tp>
-std::enable_if_t<I != sizeof...(Tp), void>
-for_each_in_tuple_const(std::tuple<Tp...> const & t, Fn && fn)
-{
-  fn(I, std::get<I>(t));
-  for_each_in_tuple_const<I + 1, Fn, Tp...>(t, std::forward<Fn>(fn));
-}
-
 template <typename Container>
 class BackInsertFunctor
 {
@@ -362,19 +289,6 @@ struct DeleteFunctor
   }
 };
 
-template <typename Container, typename Deletor>
-impl::DeleteRangeFunctor<Container, Deletor> GetRangeDeletor(Container & cont,
-                                                             Deletor const & deletor)
-{
-  return impl::DeleteRangeFunctor<Container, Deletor>(cont, deletor);
-}
-
-template <typename Container, typename Deletor>
-void DeleteRange(Container & cont, Deletor const & deletor)
-{
-  (void)GetRangeDeletor(cont, deletor)();
-}
-
 struct IdFunctor
 {
   template <typename T>
@@ -407,86 +321,6 @@ Iter PrevIterInCycle(Iter it, Iter beg, Iter end)
     it = end;
   return --it;
 }
-
-template <typename Iter1, typename Iter2, typename InsertIter>
-void AccumulateIntervals1With2(Iter1 b1, Iter1 e1, Iter2 b2, Iter2 e2, InsertIter res)
-{
-  using T = typename std::iterator_traits<Iter1>::value_type;
-
-  T prev;
-  bool validPrev = false;
-
-  while (b1 != e1 || b2 != e2)
-  {
-    // Try to continue previous range.
-    if (validPrev)
-    {
-      // add b1 range to prev if needed
-      if (b1 != e1 && b1->first < prev.second)
-      {
-        // correct only second if needed
-        if (prev.second < b1->second)
-          prev.second = b1->second;
-        ++b1;
-        continue;
-      }
-
-      // add b2 range to prev if needed
-      if (b2 != e2 && b2->first < prev.second)
-      {
-        // check that intervals are overlapped
-        if (prev.first < b2->second)
-        {
-          // correct first and second if needed
-          if (b2->first < prev.first)
-            prev.first = b2->first;
-          if (prev.second < b2->second)
-            prev.second = b2->second;
-        }
-
-        ++b2;
-        continue;
-      }
-
-      // if nothing to add - push to results
-      *res++ = prev;
-      validPrev = false;
-    }
-
-    if (b1 != e1)
-    {
-      // start new range
-      prev = *b1++;
-      validPrev = true;
-    }
-    else
-    {
-      // go to exit
-      break;
-    }
-  }
-
-  if (validPrev)
-    *res++ = prev;
-}
-
-struct EnumClassHash
-{
-  template<typename T, std::enable_if_t<std::is_enum<T>::value> * = nullptr>
-  size_t operator()(T const & t) const noexcept
-  {
-    return static_cast<size_t>(t);
-  }
-};
-
-struct RetrieveFirst
-{
-  template <typename T>
-  typename T::first_type const & operator()(T const & pair) const
-  {
-    return pair.first;
-  }
-};
 
 struct RetrieveSecond
 {

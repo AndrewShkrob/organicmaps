@@ -263,6 +263,7 @@ void Framework::OnViewportChanged(ScreenBase const & screen)
 
   GetBookmarkManager().UpdateViewport(m_currentModelView);
   m_trafficManager.UpdateViewport(m_currentModelView);
+  m_tilesManager.UpdateViewport(m_currentModelView);
   m_transitManager.UpdateViewport(m_currentModelView);
   m_isolinesManager.UpdateViewport(m_currentModelView);
 

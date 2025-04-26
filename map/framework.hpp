@@ -65,6 +65,8 @@
 #include <string>
 #include <vector>
 
+#include "tiles/include/om/tiles/tiles_manager.hpp"
+
 namespace osm
 {
 class EditableMapObject;
@@ -189,6 +191,7 @@ protected:
   RoutingManager m_routingManager;
 
   TrafficManager m_trafficManager;
+  om::tiles::TilesManager m_tilesManager;
 
   /// This function will be called by m_storage when latest local files
   /// is downloaded.
