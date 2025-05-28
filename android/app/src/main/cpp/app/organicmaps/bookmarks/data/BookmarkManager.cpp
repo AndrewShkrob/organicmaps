@@ -50,25 +50,20 @@ void PrepareClassRefs(JNIEnv * env)
   if (g_bookmarkManagerClass)
     return;
 
-  g_bookmarkManagerClass =
-    jni::GetGlobalClassRef(env, "app/organicmaps/bookmarks/data/BookmarkManager");
-  g_bookmarkManagerInstanceField = jni::GetStaticFieldID(env, g_bookmarkManagerClass, "INSTANCE",
-    "Lapp/organicmaps/bookmarks/data/BookmarkManager;");
+  g_bookmarkManagerClass = jni::GetGlobalClassRef(env, "app/organicmaps/bookmarks/data/BookmarkManager");
+  g_bookmarkManagerInstanceField =
+    jni::GetStaticFieldID(env, g_bookmarkManagerClass, "INSTANCE", "Lapp/organicmaps/bookmarks/data/BookmarkManager;");
 
-  jobject bookmarkManagerInstance = env->GetStaticObjectField(g_bookmarkManagerClass,
-                                                              g_bookmarkManagerInstanceField);
-  g_onBookmarksChangedMethod =
-    jni::GetMethodID(env, bookmarkManagerInstance, "onBookmarksChanged", "()V");
+  jobject bookmarkManagerInstance = env->GetStaticObjectField(g_bookmarkManagerClass, g_bookmarkManagerInstanceField);
+  g_onBookmarksChangedMethod =    jni::GetMethodID(env, bookmarkManagerInstance, "onBookmarksChanged", "()V");
   g_onBookmarksLoadingStartedMethod =
-    jni::GetMethodID(env, bookmarkManagerInstance, "onBookmarksLoadingStarted", "()V");
+    jni::GetMethodID(env,  bookmarkManagerInstance, "onBookmarksLoadingStarted", "()V");
   g_onBookmarksLoadingFinishedMethod =
-    jni::GetMethodID(env, bookmarkManagerInstance, "onBookmarksLoadingFinished", "()V");
+       jni::GetMethodID(env, bookmarkManagerInstance, "onBookmarksLoadingFinished", "()V");
   g_onBookmarksFileLoadedMethod =
-    jni::GetMethodID(env, bookmarkManagerInstance, "onBookmarksFileLoaded",
-                     "(ZLjava/lang/String;Z)V");
-  g_onPreparedFileForSharingMethod =
-    jni::GetMethodID(env, bookmarkManagerInstance, "onPreparedFileForSharing",
-                     "(Lapp/organicmaps/bookmarks/data/BookmarkSharingResult;)V");
+     jni::GetMethodID(env, bookmarkManagerInstance, "onBookmarksFileLoaded", "(ZLjava/lang/String;Z)V");
+  g_onPreparedFileForSharingMethod = jni::GetMethodID(env, bookmarkManagerInstance, "onPreparedFileForSharing",
+                                                      "(Lapp/organicmaps/bookmarks/data/BookmarkSharingResult;)V");
 
   g_longClass = jni::GetGlobalClassRef(env,"java/lang/Long");
   g_longConstructor = jni::GetConstructorID(env, g_longClass, "(J)V");
