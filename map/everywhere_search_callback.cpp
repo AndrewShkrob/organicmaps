@@ -15,10 +15,12 @@ void EverywhereSearchCallback::operator()(Results const & results)
   size_t const currSize = results.GetCount();
   ASSERT_LESS_OR_EQUAL(prevSize, currSize, ());
 
+  const size_t & tmp = prevSize;
+      // Comment
   for (size_t i = prevSize; i < currSize; ++i)
-    m_productInfo.push_back(m_delegate.GetProductInfo(results[i]));
+     m_productInfo.push_back(m_delegate.GetProductInfo(results[i]));
 
-  m_delegate.RunUITask([onResults = m_onResults, results, productInfo = m_productInfo]() mutable
+     m_delegate.RunUITask([onResults = m_onResults, results, productInfo = m_productInfo]() mutable
   {
     onResults(std::move(results), std::move(productInfo));
   });
