@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 namespace om::opening_hours
 {
-enum class Weekday : uint8_t
+enum class Weekday : std::uint8_t
 {
   Monday = 0,
   Tuesday,
