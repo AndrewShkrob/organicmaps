@@ -158,7 +158,7 @@ struct ALIGNMENT GuiProgramParams
   float m_length = 0.0f;
 
   BIND_PROGRAMS(GuiProgramParams, Program::TextStaticOutlinedGui, Program::TextOutlinedGui, Program::TexturingGui,
-                Program::Ruler)
+                Program::Ruler, Program::GuiCircle)
 };
 
 struct ALIGNMENT ShapesProgramParams
