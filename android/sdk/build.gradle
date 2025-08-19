@@ -1,5 +1,6 @@
 plugins {
   id 'com.android.library'
+  id 'maven-publish'
 }
 
 android {
@@ -15,6 +16,10 @@ android {
   defaultConfig {
     minSdk = propMinSdkVersion.toInteger()
     targetSdk = propTargetSdkVersion.toInteger()
+
+    aarMetadata {
+      minCompileSdk = minSdk
+    }
 
     externalNativeBuild {
       def pchFlag = 'OFF'
@@ -101,6 +106,13 @@ android {
     targetCompatibility JavaVersion.VERSION_17
   }
 
+  publishing {
+    singleVariant('release') {
+      withSourcesJar()
+      withJavadocJar()
+    }
+  }
+
   lint {
     disable 'MissingTranslation'
     // https://github.com/organicmaps/organicmaps/issues/3551
@@ -144,4 +156,28 @@ project.afterEvaluate {
 
 tasks.withType(JavaCompile).configureEach {
   options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+}
+
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/organicmaps/organicmaps"
+      credentials {
+        username = ""
+        password = ""
+      }
+    }
+  }
+  publications {
+    release(MavenPublication) {
+      groupId = 'app.organicmaps'
+      artifactId = 'sdk'
+      version = rootProject.ext.versionName
+
+      afterEvaluate {
+        from components.release
+      }
+    }
+  }
 }
