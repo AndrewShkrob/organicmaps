@@ -6,8 +6,20 @@
   <style name="MwmWidget.ProgressWheel"/>
 
   <style name="MwmWidget.SpeedLimit">
-    <item name="speedLimitAlertColor">@color/base_red</item>
-    <item name="speedLimitBorderColor">@color/base_red</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="background_color">@android:color/white</item>
+    <item name="alert_color">@color/red_color</item>
+    <item name="speed_text_color">@android:color/black</item>
+    <item name="speed_limit_background_color">@android:color/white</item>
+    <item name="speed_limit_border_color">@color/red_color</item>
+    <item name="speed_limit_size">78dp</item>
+    <item name="current_speed_info_position">bottom</item>
+  </style>
+
+  <style name="MwmWidget.SpeedLimit.AndroidAuto" parent="MwmWidget.SpeedLimit">
+    <item name="speed_limit_size">70dp</item>
+    <item name="current_speed_info_position">left</item>
   </style>
 
   <style name="MwmWidget.FrameLayout"/>

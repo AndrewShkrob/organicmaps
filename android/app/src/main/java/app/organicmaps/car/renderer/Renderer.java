@@ -131,13 +131,11 @@ public abstract class Renderer implements DefaultLifecycleObserver
   /**
    * Updates speed limit view.
    *
-   * @param speedLimit         The speed limit value in formatted units. A value <= 0 will hide the view.
-   * @param speedLimitExceeded True if the current speed exceeds the speed limit, false otherwise.
+   * @param speedLimit    The speed limit value in meters per second. A value <= 0 will hide the view.
+   * @param currentSpeed  Current speed in meters per second.
    */
-  public abstract void setSpeedLimit(int speedLimit, boolean speedLimitExceeded);
+  public abstract void updateSpeedWidget(int speedLimit, int currentSpeed);
 
-  public void hideSpeedLimit()
-  {
-    setSpeedLimit(0, false);
-  }
+  public abstract void showSpeedLimitWidget();
+  public abstract void hideSpeedLimitWidget();
 }

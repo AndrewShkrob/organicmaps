@@ -113,12 +113,10 @@
       app:lanesEditModeLanesCount="5"
       tools:visibility="visible" />
 
-  <app.organicmaps.widget.SpeedLimitView
-    android:id="@+id/nav_speed_limit"
+  <app.organicmaps.sdk.widget.speed.SpeedView
+    android:id="@+id/nav_speed_container"
     style="@style/MwmWidget.SpeedLimit"
-    android:layout_width="60dp"
-    android:layout_height="60dp"
-    android:layout_margin="@dimen/margin_half"
+    tools:speed_units="@string/kilometers_per_hour"
     app:layout_constraintEnd_toEndOf="@id/nav_next_turn_container"
     app:layout_constraintStart_toStartOf="@id/nav_next_turn_container"
     app:layout_constraintTop_toBottomOf="@id/nav_next_turn_container" />

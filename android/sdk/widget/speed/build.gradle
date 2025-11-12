@@ -1,0 +1,17 @@
+plugins {
+  id 'com.android.library'
+}
+
+apply from: "${rootProject.rootDir}/groovy/common-config.gradle"
+
+android {
+  namespace = 'app.organicmaps.sdk.widget.speed'
+  compileSdk = propCompileSdkVersion.toInteger()
+}
+
+dependencies {
+  implementation project(':sdk')
+
+  implementation 'androidx.annotation:annotation:1.9.1'
+  implementation "androidx.constraintlayout:constraintlayout:2.2.1"
+}

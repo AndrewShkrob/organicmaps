@@ -4,7 +4,6 @@ import android.app.Presentation;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -16,9 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.car.app.CarContext;
 import androidx.car.app.SurfaceContainer;
+import app.organicmaps.R;
 import app.organicmaps.sdk.MapController;
+import app.organicmaps.sdk.settings.UnitLocale;
 import app.organicmaps.sdk.util.log.Logger;
-import app.organicmaps.widget.SpeedLimitView;
+import app.organicmaps.sdk.widget.speed.SpeedView;
+import app.organicmaps.sdk.widget.speed.SpeedViewManager;
 
 @RequiresApi(23)
 class SurfaceCallback extends SurfaceCallbackBase
@@ -34,9 +36,7 @@ class SurfaceCallback extends SurfaceCallbackBase
   @Nullable
   private FrameLayout mSpeedLimitContainer;
   @Nullable
-  private SpeedLimitView mSpeedLimitView;
-
-  private final int mSpeedLimitViewSize;
+  private SpeedViewManager mSpeedViewManager;
 
   @Nullable
   private VirtualDisplay mVirtualDisplay;
@@ -62,8 +62,6 @@ class SurfaceCallback extends SurfaceCallbackBase
       public void surfaceDestroyed(@NonNull SurfaceHolder holder)
       {}
     });
-    mSpeedLimitViewSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SPEED_LIMIT_VIEW_SIZE_DP,
-                                                          mCarContext.getResources().getDisplayMetrics());
     initSpeedLimitView();
   }
 
@@ -78,7 +76,6 @@ class SurfaceCallback extends SurfaceCallbackBase
                                   surfaceContainer.getDpi(), surfaceContainer.getSurface(),
                                   DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY);
     mPresentation = new Presentation(mCarContext, mVirtualDisplay.getDisplay());
-
     mPresentation.setContentView(prepareViewForPresentation(mMapController.getView()));
     mPresentation.show();
   }
@@ -103,10 +100,10 @@ class SurfaceCallback extends SurfaceCallbackBase
   }
 
   @NonNull
-  SpeedLimitView getSpeedLimitView()
+  SpeedViewManager getSpeedViewManager()
   {
-    assert mSpeedLimitView != null : "mSpeedLimitContainer must be initialized";
-    return mSpeedLimitView;
+    assert mSpeedViewManager != null : "mSpeedLimitContainer must be initialized";
+    return mSpeedViewManager;
   }
 
   void stopPresenting()
@@ -142,18 +139,15 @@ class SurfaceCallback extends SurfaceCallbackBase
     mSpeedLimitContainer = new FrameLayout(mCarContext);
     mSpeedLimitContainer.setLayoutParams(getSpeedLimitContainerLayoutParams());
 
-    final boolean restoreOldState = mSpeedLimitView != null;
-    final boolean isAlert = restoreOldState && mSpeedLimitView.isAlert();
-    final int speedLimit = restoreOldState ? mSpeedLimitView.getSpeedLimit() : 0;
-
-    mSpeedLimitView = new SpeedLimitView(mCarContext);
-    if (restoreOldState)
-      mSpeedLimitView.setSpeedLimit(speedLimit, isAlert);
+    final SpeedView speedView = new SpeedView(mCarContext, null, 0, R.style.MwmWidget_SpeedLimit_AndroidAuto);
+    mSpeedViewManager = new SpeedViewManager(speedView);
+    speedView.setSpeedUnits(UnitLocale.getUnits() == UnitLocale.UNITS_METRIC ? R.string.kilometers_per_hour
+                                                                             : R.string.miles_per_hour);
 
     final FrameLayout.LayoutParams speedLimitLayoutParams =
-        new FrameLayout.LayoutParams(mSpeedLimitViewSize, mSpeedLimitViewSize);
+        new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     speedLimitLayoutParams.gravity = Gravity.END | Gravity.BOTTOM;
-    mSpeedLimitContainer.addView(mSpeedLimitView, speedLimitLayoutParams);
+    mSpeedLimitContainer.addView(speedView, speedLimitLayoutParams);
   }
 
   @NonNull

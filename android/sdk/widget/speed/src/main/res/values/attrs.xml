@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="SpeedView">
+    <attr name="current_speed_info_position" format="enum">
+      <enum name="top" value="0" />
+      <enum name="bottom" value="1" />
+      <enum name="left" value="2" />
+      <enum name="right" value="3" />
+    </attr>
+    <attr name="speed_limit_size" format="dimension" />
+    <attr name="speed_units" format="string" />
+    <attr name="background_color" format="color" />
+    <attr name="alert_color" format="color" />
+    <attr name="speed_text_color" format="color" />
+    <attr name="speed_limit_background_color" format="color" />
+    <attr name="speed_limit_border_color" format="color" />
+  </declare-styleable>
+</resources>

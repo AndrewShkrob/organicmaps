@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical">
+
+  <!-- Default -->
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+  <!-- Orientations -->
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:current_speed_info_position="right" />
+
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:current_speed_info_position="left" />
+
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:current_speed_info_position="top" />
+
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:current_speed_info_position="bottom" />
+
+  <!-- Sizes -->
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:speed_limit_size="30dp" />
+
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:speed_limit_size="60dp" />
+
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:speed_limit_size="100dp" />
+
+  <app.organicmaps.sdk.widget.speed.SpeedView
+      style="@style/DemoSpeedView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:current_speed_info_position="top"
+      app:speed_limit_size="100dp" />
+</LinearLayout>

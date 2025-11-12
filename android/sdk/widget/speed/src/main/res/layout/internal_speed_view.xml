@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="3dp"
+    android:clipToPadding="false">
+
+  <app.organicmaps.sdk.widget.speed.internal.BackgroundView
+      android:id="@+id/_background"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent" />
+
+  <LinearLayout
+      android:id="@+id/_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent" >
+    <app.organicmaps.sdk.widget.speed.internal.SpeedLimitView
+        android:id="@+id/_speed_limit"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/_current_speed_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1">
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center">
+        <TextView
+            android:id="@+id/_current_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|bottom"
+            android:textColor="@android:color/black"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:maxLength="3"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="90"
+            tools:textSize="32sp" />
+        <TextView
+            android:id="@+id/_speed_units"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:maxLength="13"
+            android:gravity="center_horizontal|top"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="@id/_current_speed"
+            app:layout_constraintEnd_toEndOf="@id/_current_speed"
+            app:layout_constraintTop_toBottomOf="@id/_current_speed"
+            tools:text="km/h"
+            tools:textSize="14sp" />
+      </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+  </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

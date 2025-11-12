@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="red_color">#FFF54137</color>
+
+  <string name="speed_units" translatable="false">km/h</string>
+
+  <style name="DemoSpeedView">
+    <item name="speed_units">@string/speed_units</item>
+
+    <item name="background_color">@android:color/white</item>
+    <item name="alert_color">@color/red_color</item>
+    <item name="speed_text_color">@android:color/black</item>
+    <item name="speed_limit_background_color">@android:color/white</item>
+    <item name="speed_limit_border_color">@color/red_color</item>
+  </style>
+</resources>

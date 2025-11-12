@@ -89,7 +89,19 @@ class SurfaceRendererLegacy extends Renderer
   }
 
   @Override
-  public void setSpeedLimit(int speedLimit, boolean speedLimitExceeded)
+  public void updateSpeedWidget(int speedLimit, int currentSpeed)
+  {
+    // Not supported.
+  }
+
+  @Override
+  public void showSpeedLimitWidget()
+  {
+    // Not supported.
+  }
+
+  @Override
+  public void hideSpeedLimitWidget()
   {
     // Not supported.
   }

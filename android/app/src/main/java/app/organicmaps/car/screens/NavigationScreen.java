@@ -39,7 +39,6 @@ import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingInfo;
 import app.organicmaps.sdk.sound.TtsPlayer;
 import app.organicmaps.sdk.util.LocationUtils;
-import app.organicmaps.sdk.util.StringUtils;
 import app.organicmaps.sdk.util.log.Logger;
 import java.util.List;
 import java.util.Objects;
@@ -159,6 +158,7 @@ public class NavigationScreen extends BaseMapScreen implements RoutingController
       NavigationService.startForegroundService(getCarContext(),
                                                CarAppService.getCarNotificationExtender(getCarContext()));
     updateTrip(/* location */ null);
+    getSurfaceRenderer().showSpeedLimitWidget();
   }
 
   @Override
@@ -183,7 +183,7 @@ public class NavigationScreen extends BaseMapScreen implements RoutingController
     ThemeUtils.update(getCarContext());
     mNavigationManager.navigationEnded();
     mNavigationManager.clearNavigationManagerCallback();
-    getSurfaceRenderer().hideSpeedLimit();
+    getSurfaceRenderer().hideSpeedLimitWidget();
   }
 
   @NonNull
@@ -296,8 +296,9 @@ public class NavigationScreen extends BaseMapScreen implements RoutingController
 
   private void updateSpeedLimit(@NonNull final RoutingInfo info, @Nullable Location location)
   {
-    final boolean speedLimitExceeded = location != null && info.speedLimitMps < location.getSpeed();
-    getSurfaceRenderer().setSpeedLimit(StringUtils.nativeFormatSpeed(info.speedLimitMps), speedLimitExceeded);
+    final int speedLimit = (int) info.speedLimitMps;
+    final int currentSpeed = location == null ? 0 : (int) location.getSpeed();
+    getSurfaceRenderer().updateSpeedWidget(speedLimit, currentSpeed);
   }
 
   /**

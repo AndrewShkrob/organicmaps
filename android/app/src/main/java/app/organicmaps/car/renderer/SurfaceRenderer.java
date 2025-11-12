@@ -52,8 +52,20 @@ class SurfaceRenderer extends Renderer
   }
 
   @Override
-  public void setSpeedLimit(int speedLimit, boolean speedLimitExceeded)
+  public void updateSpeedWidget(int speedLimit, int currentSpeed)
   {
-    mSurfaceCallback.getSpeedLimitView().setSpeedLimit(speedLimit, speedLimitExceeded);
+    mSurfaceCallback.getSpeedViewManager().setSpeed(speedLimit, currentSpeed);
+  }
+
+  @Override
+  public void showSpeedLimitWidget()
+  {
+    mSurfaceCallback.getSpeedViewManager().show();
+  }
+
+  @Override
+  public void hideSpeedLimitWidget()
+  {
+    mSurfaceCallback.getSpeedViewManager().hide();
   }
 }

@@ -22,13 +22,14 @@ import app.organicmaps.sdk.Router;
 import app.organicmaps.sdk.maplayer.traffic.TrafficManager;
 import app.organicmaps.sdk.routing.RoutingController;
 import app.organicmaps.sdk.routing.RoutingInfo;
-import app.organicmaps.sdk.util.StringUtils;
+import app.organicmaps.sdk.settings.UnitLocale;
 import app.organicmaps.sdk.widget.roadshield.RoadShieldUtils;
+import app.organicmaps.sdk.widget.speed.SpeedView;
+import app.organicmaps.sdk.widget.speed.SpeedViewManager;
 import app.organicmaps.util.UiUtils;
 import app.organicmaps.util.Utils;
 import app.organicmaps.util.WindowInsetUtils;
 import app.organicmaps.widget.LanesView;
-import app.organicmaps.widget.SpeedLimitView;
 import app.organicmaps.widget.menu.NavMenu;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -48,7 +49,7 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
   @NonNull
   private final LanesView mLanesView;
   @NonNull
-  private final SpeedLimitView mSpeedLimit;
+  private final SpeedViewManager mSpeedViewManager;
 
   private final MapButtonsViewModel mMapButtonsViewModel;
 
@@ -90,7 +91,10 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
 
     mLanesView = topFrame.findViewById(R.id.lanes);
 
-    mSpeedLimit = topFrame.findViewById(R.id.nav_speed_limit);
+    final SpeedView speedView = topFrame.findViewById(R.id.nav_speed_container);
+    speedView.setSpeedUnits(UnitLocale.getUnits() == UnitLocale.UNITS_METRIC ? R.string.kilometers_per_hour
+                                                                             : R.string.miles_per_hour);
+    mSpeedViewManager = new SpeedViewManager(speedView);
 
     // Show a blank view below the navbar to hide the menu content
     final View navigationBarBackground = mFrame.findViewById(R.id.nav_bottom_sheet_nav_bar);
@@ -257,7 +261,8 @@ public class NavigationController implements TrafficManager.TrafficCallback, Nav
   private void updateSpeedLimit(@NonNull final RoutingInfo info)
   {
     final Location location = MwmApplication.from(mFrame.getContext()).getLocationHelper().getSavedLocation();
-    final boolean speedLimitExceeded = location != null && info.speedLimitMps < location.getSpeed();
-    mSpeedLimit.setSpeedLimit(StringUtils.nativeFormatSpeed(info.speedLimitMps), speedLimitExceeded);
+    final int speedLimit = (int) info.speedLimitMps;
+    final int currentSpeed = location == null ? 0 : (int) location.getSpeed();
+    mSpeedViewManager.setSpeed(speedLimit, currentSpeed);
   }
 }
