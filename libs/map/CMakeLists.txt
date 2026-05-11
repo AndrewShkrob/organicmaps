@@ -102,6 +102,7 @@ target_link_libraries(${PROJECT_NAME}
     ge0
     drape_frontend
     agg
+    om::tiles
 )
 
 omim_add_test_subdirectory(map_integration_tests)

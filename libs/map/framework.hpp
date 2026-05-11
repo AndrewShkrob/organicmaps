@@ -59,6 +59,8 @@
 
 #include "std/target_os.hpp"
 
+#include "tiles/tile_server.hpp"
+
 #include <functional>
 #include <memory>
 #include <optional>
@@ -143,6 +145,8 @@ protected:
   StringsBundle m_stringsBundle;
 
   FeaturesFetcher m_featuresFetcher;
+
+  std::unique_ptr<om::tiles::TileServer> m_tileServer;
 
   // The order matters here: DisplayedCategories may be used only
   // after classificator is loaded by |m_featuresFetcher|.

@@ -96,6 +96,7 @@ copy_resources(
   symbols
   countries-strings
   vulkan_shaders
+  tiles
 
   categories.txt
   categories_cuisines.txt

@@ -70,6 +70,8 @@
 
 #include <algorithm>
 
+#include "tiles/configs.hpp"
+
 using namespace location;
 using namespace routing;
 using namespace storage;
@@ -1589,53 +1591,67 @@ void Framework::CreateDrapeEngine(ref_ptr<dp::GraphicsContextFactory> contextFac
         break;
   };
 
-  auto tileBackgroundReadFn = [this](df::TileKey const & tileKey, dp::BackgroundMode mode) -> void
+  auto const serverConfig = om::tiles::config::GetTileServers()["OpenStreetMap"];
+  m_tileServer =
+      std::make_unique<om::tiles::TileServer>(serverConfig, [this, serverConfig](om::tiles::Tile const & tile)
   {
-#if DEBUG_BACKGROUND_TILE
-    constexpr uint32_t kTileSize = 64;
-    constexpr uint32_t kBlockSize = 8;
-    constexpr uint32_t kBytesPerPixel = 4;
-    static std::vector<uint8_t> kPixels;
-    if (kPixels.empty())
-    {
-      kPixels.resize(kTileSize * kTileSize * kBytesPerPixel);
-      for (uint32_t y = 0; y < kTileSize; ++y)
-      {
-        for (uint32_t x = 0; x < kTileSize; ++x)
-        {
-          uint32_t const blockX = x / kBlockSize;
-          uint32_t const blockY = y / kBlockSize;
-          bool const isWhiteBlock = (blockX + blockY) % 2 == 0;
-          uint32_t const pixelIndex = (y * kTileSize + x) * kBytesPerPixel;
-
-          if (isWhiteBlock)
-          {
-            // White block
-            kPixels[pixelIndex] = 255;      // R
-            kPixels[pixelIndex + 1] = 255;  // G
-            kPixels[pixelIndex + 2] = 255;  // B
-            kPixels[pixelIndex + 3] = 255;  // A
-          }
-          else
-          {
-            // Dark gray block
-            kPixels[pixelIndex] = 64;       // R
-            kPixels[pixelIndex + 1] = 64;   // G
-            kPixels[pixelIndex + 2] = 64;   // B
-            kPixels[pixelIndex + 3] = 255;  // A
-          }
-        }
-      }
-    }
-
     if (m_drapeEngine)
     {
-      m_drapeEngine->SetTileBackgroundData(tileKey, kTileSize, kTileSize, dp::TextureFormat::RGBA8, mode,
-                                           std::vector<uint8_t>(kPixels));
+      std::vector<uint8_t> data(tile.data.begin(), tile.data.end());
+      m_drapeEngine->SetTileBackgroundData(tile.key.ToDfTileKey(), serverConfig.resolution, serverConfig.resolution,
+                                           dp::TextureFormat::RGBA8, dp::BackgroundMode::Satellite, std::move(data));
     }
+  });
+
+  auto tileBackgroundReadFn = [this](df::TileKey const & tileKey, dp::BackgroundMode mode) -> void
+  {
+    m_tileServer->RequestTile(om::tiles::TileKey::From(tileKey));
+#if DEBUG_BACKGROUND_TILE
+    // LOG(LINFO, ("Requesting background tile for", x, y, z, "mode", static_cast<int>(mode)));
+    // constexpr uint32_t kTileSize = 64;
+    // constexpr uint32_t kBlockSize = 8;
+    // constexpr uint32_t kBytesPerPixel = 4;
+    // static std::vector<uint8_t> kPixels;
+    // if (kPixels.empty())
+    // {
+    //   kPixels.resize(kTileSize * kTileSize * kBytesPerPixel);
+    //   for (uint32_t y = 0; y < kTileSize; ++y)
+    //   {
+    //     for (uint32_t x = 0; x < kTileSize; ++x)
+    //     {
+    //       uint32_t const blockX = x / kBlockSize;
+    //       uint32_t const blockY = y / kBlockSize;
+    //       bool const isWhiteBlock = (blockX + blockY) % 2 == 0;
+    //       uint32_t const pixelIndex = (y * kTileSize + x) * kBytesPerPixel;
+    //
+    //       if (isWhiteBlock)
+    //       {
+    //         // White block
+    //         kPixels[pixelIndex] = 255;      // R
+    //         kPixels[pixelIndex + 1] = 255;  // G
+    //         kPixels[pixelIndex + 2] = 255;  // B
+    //         kPixels[pixelIndex + 3] = 255;  // A
+    //       }
+    //       else
+    //       {
+    //         // Dark gray block
+    //         kPixels[pixelIndex] = 64;       // R
+    //         kPixels[pixelIndex + 1] = 64;   // G
+    //         kPixels[pixelIndex + 2] = 64;   // B
+    //         kPixels[pixelIndex + 3] = 255;  // A
+    //       }
+    //     }
+    //   }
+    // }
+    //
+    // if (m_drapeEngine)
+    // {
+    //   m_drapeEngine->SetTileBackgroundData(tileKey, kTileSize, kTileSize, dp::TextureFormat::RGBA8, mode,
+    //                                        std::vector<uint8_t>(kPixels));
+    // }
 #else
-  // Handle cancellation of tile background reading for the specified tile and mode.
-  // This is a placeholder implementation; actual logic will depend on application requirements.
+    // Handle cancellation of tile background reading for the specified tile and mode.
+    // This is a placeholder implementation; actual logic will depend on application requirements.
 #endif
   };
 

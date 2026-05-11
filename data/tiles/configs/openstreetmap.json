@@ -1,0 +1,24 @@
+{
+  "name": "OpenStreetMap",
+  "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  "minZoom": 0,
+  "maxZoom": 19,
+  "resolution": 256,
+  "api": {
+    "keyRequired": false
+  },
+  "header": {
+    "userAgentRequired": true
+  },
+  "attribution": {
+    "required": true,
+    "text": "© OpenStreetMap contributors",
+    "url": "https://www.openstreetmap.org/copyright"
+  },
+  "cache": {
+    "allowed": true,
+    "ifNoneMatchHeaderSupported": true,
+    "ifModifiedSinceHeaderSupported": true,
+    "ttl": 604800
+  }
+}

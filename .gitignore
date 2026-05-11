@@ -99,6 +99,8 @@ data/benchmarks/ipad2/*
 data/benchmarks/iphone5/*
 data/benchmarks/maps/*
 
+data/tiles/cache
+
 qtc_packaging
 
 tools/twine/.git
